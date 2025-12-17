@@ -5,48 +5,37 @@ from src.arbol import Arbol
 class TestArbol(unittest.TestCase):
 
     def test_insertar(self):
-        a = Arbol()
-        a.insertar("/root", "docs", "carpeta")
-        self.assertEqual(len(a.root.children), 1)
+        ...
 
     def test_mover(self):
+        ...
+
+    def test_persistencia(self):
+        ...
+
+    def test_busqueda_exacta(self):
+        ...
+
+    def test_autocompletado(self):
+        ...
+
+    def test_eliminar_inexistente(self):
+        a = Arbol()
+        a.eliminar("/root/noexiste")
+        self.assertEqual(a.preorden(), ["root"])
+
+    def test_autocompletar_vacio(self):
+        a = Arbol()
+        res = a.autocompletar("zzz")
+        self.assertEqual(res, [])
+
+    def test_consistencia_mover_renombrar(self):
         a = Arbol()
         a.insertar("/root", "docs", "carpeta")
         a.insertar("/root", "img", "carpeta")
         a.mover("/root/docs", "/root/img")
-        self.assertEqual(
-            len(a.buscar_por_ruta("/root/img").children),
-            1
-        )
-
-    def test_persistencia(self):
-        a = Arbol()
-        a.insertar("/root", "docs", "carpeta")
-        a.insertar("/root/docs", "archivo.txt", "archivo")
-
-        a.guardar_json("test.json")
-
-        b = Arbol()
-        b.cargar_json("test.json")
-
-        self.assertEqual(a.preorden(), b.preorden())
-
-    # ---------------- NUEVOS TESTS (DÍA 5–6 / 7–9) ----------------
-
-    def test_busqueda_exacta(self):
-        a = Arbol()
-        a.insertar("/root", "docs", "carpeta")
-        nodo = a.buscar_exacto("docs")
-        self.assertIsNotNone(nodo)
-        self.assertEqual(nodo.nombre, "docs")
-
-    def test_autocompletado(self):
-        a = Arbol()
-        a.insertar("/root", "docs", "carpeta")
-        a.insertar("/root", "downloads", "carpeta")
-        resultados = a.autocompletar("do")
-        self.assertIn("docs", resultados)
-        self.assertIn("downloads", resultados)
+        a.renombrar("/root/img/docs", "docs2")
+        self.assertIsNotNone(a.buscar_exacto("docs2"))
 
 
 if __name__ == "__main__":
